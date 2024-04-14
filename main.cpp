@@ -1,3 +1,8 @@
-#include <iostrean>
-use namespace std
-cout << "COP final project" << endl;
+#include <iostream>
+using namespace std;
+
+
+ int main(){
+    cout << "COP final project" << endl;
+
+}
