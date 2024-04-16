@@ -63,6 +63,7 @@ int main() {
     TaskNode *node = new TaskNode(priority, task);
     pq.insert(node);
   }
+  cout << "Your next priority is: ";
   cout << pq.min()->task << endl;
   
 }
