@@ -63,7 +63,24 @@ int main() {
     TaskNode *node = new TaskNode(priority, task);
     pq.insert(node);
   }
+  
   cout << "Your next priority is: ";
   cout << pq.min()->task << endl;
+  cout << "done with a task? ";
+  string yes;
+  cin >> yes;
+  string i;
+  if (yes == "y"){
+    cout << "What task did you complete? ";
+    cin >> i;
+    int x = stoi(i);
+    pq.removeAtIndex(x);
+    HeapQueue<TaskNode *, TaskNode::Compare> toPrint = pq;
+    while (!toPrint.empty()){
+      cout << toPrint.min()->task << endl;
+      toPrint.removeMin();
+    }
+  }
+  
   
 }

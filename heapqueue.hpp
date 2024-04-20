@@ -31,6 +31,7 @@ public:
   bool hasRight(const Position &p) const { return 2 * idx(p) + 1 <= size(); }
   bool isRoot(const Position &p) const { return idx(p) == 1; }
   Position root() { return pos(1); }
+  Position atIndex(int i) {return pos(i); }
   Position last() { return pos(size()); }
   void addLast(const E &e) { V.push_back(e); }
   void removeLast() { V.pop_back(); }
@@ -51,6 +52,7 @@ public:
   void insert(const E &e);
   const E &min();
   void removeMin();
+  void removeAtIndex(int i);
 
 private:
   VectorCompleteTree<E> T;
@@ -76,6 +78,40 @@ const E &HeapQueue<E, C>::min()
 {
   return *(T.root());
 }
+
+template <typename E, typename C>
+void HeapQueue<E, C>::removeAtIndex(int i)
+{
+  if (size() == 1)
+  {
+    T.removeLast();
+  }
+  else
+  {
+    Position u = T.atIndex(i);
+    T.swap(u, T.last());
+    T.removeLast();
+
+    while (T.hasLeft(u))
+    {
+      Position v = T.left(u);
+      if (T.hasRight(u) && isLess(*(T.right(u)), *v))
+      {
+        v = T.right(u);
+      }
+      if (isLess(*v, *u))
+      {
+        T.swap(u, v);
+        u = v;
+      }
+      else
+      {
+        break;
+      }
+    }
+  }
+}
+
 
 template <typename E, typename C>
 void HeapQueue<E, C>::removeMin()
