@@ -50,7 +50,7 @@ int main() {
   // repeat until the list of integers is empty
 
   int n;
-  cout << "Enter the number of tasks: ";
+  cout << "Enter the number of tasks you woudl like to do today? ";
   cin >> n;
   for (int i = 0; i < n; i++){
     int priority;
