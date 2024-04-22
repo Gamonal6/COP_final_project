@@ -53,6 +53,8 @@ public:
   const E &min();
   void removeMin();
   void removeAtIndex(int i);
+  void PeekAtIndex(int i);
+
 
 private:
   VectorCompleteTree<E> T;
@@ -109,6 +111,16 @@ void HeapQueue<E, C>::removeAtIndex(int i)
         break;
       }
     }
+  }
+}
+
+template <typename E, typename C>
+void HeapQueue<E, C>::PeekAtIndex(int i)
+{
+  if (i >= 1 && i <= size())
+    {
+      Position p = T.atIndex(i);
+      return p;
   }
 }
 
