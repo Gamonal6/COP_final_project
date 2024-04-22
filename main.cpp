@@ -51,7 +51,7 @@ bool TaskNode::Compare::operator()(const TaskNode *n1,
 
 int main() {
   
-    HeapQueue<TaskNode *, TaskNode::Compare> pq;
+  HeapQueue<TaskNode *, TaskNode::Compare> pq;
 
   // CREATING A TODO LIST:
   // prompt the use for number of tasks n
@@ -127,8 +127,7 @@ while (!pq.empty()) {
       int x = stoi(i);
       cout << "How many minutes did you work on the task? " << endl;
       cin >> MinutesWorked;
-      pq.PeekAtIndex(x);
-      HeapQueue<TaskNode *, TaskNode::SubtractMinutes> toPrint = pq;
+      //pq.PeekAtIndex(x);
     }
     
   }
