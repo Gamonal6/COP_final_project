@@ -1,7 +1,9 @@
 #ifndef TASKBST_H
 #define TASKBST_H
 #include <iostream>
+#include <chrono>
 using namespace std;
+using namespace std::chrono;
 template <typename T>
 class TaskBST {
 private:
@@ -27,22 +29,12 @@ private:
         }
     }
 
-public:
-    TaskBST() : root(nullptr) {}
-    void insert(T new_node) {
-        root = insert(root, new_node);
-    }
-
-    void displayTasks() {
-        inorderTraversal(root);
-    }
-
-    void deleteNode(T node, int key) {
+    T deleteNode(T node, year_month_day key) {
         if (!node) return; 
 
-        if (key < node->date)
+        if (key < node->dueDate)
             node->left = deleteNode(node->left, key);
-        else if (key > node->date)
+        else if (key > node->dueDate)
             node->right = deleteNode(node->right, key);
         else {
             if (!node->left) {
@@ -56,11 +48,33 @@ public:
             
             T temp = minValueNode(node->right);
 
-            node->key = temp->key;
+            node->dueDate = temp->key;
 
-            node->right = deleteNode(node->right, temp->date);
+            node->right = deleteNode(node->right, temp->dueDate);
         }
         return node;
+    }
+
+    T minValueNode(T node) {
+        T current = node;
+        while (current && current->left != nullptr) {
+            current = current->left;
+        }
+        return current;
+    }
+
+public:
+    TaskBST() : root(nullptr) {}
+    void insert(T new_node) {
+        root = insert(root, new_node);
+    }
+
+    void displayTasks() {
+        inorderTraversal(root);
+    }
+
+    void deleteNode(year_month_day date){
+        deleteNode(root, date);
     }
 
 };
