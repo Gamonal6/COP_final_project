@@ -1,6 +1,5 @@
 #ifndef TASKBST_H
 #define TASKBST_H
-
 #include <iostream>
 using namespace std;
 template <typename T>
@@ -23,7 +22,7 @@ private:
     void inorderTraversal(T node) {
         if (node) {
             inorderTraversal(node->left);
-            std::cout << "Due Date: " << node->dueDate << ", Title: " << node->task << std::endl;
+            std::cout << "Due Date: " << node->dueDate << "|| Title: " << node->task << " || Priority: " << node->priority << std::endl;
             inorderTraversal(node->right);
         }
     }
@@ -37,6 +36,33 @@ public:
     void displayTasks() {
         inorderTraversal(root);
     }
+
+    void deleteNode(T node, int key) {
+        if (!node) return; 
+
+        if (key < node->date)
+            node->left = deleteNode(node->left, key);
+        else if (key > node->date)
+            node->right = deleteNode(node->right, key);
+        else {
+            if (!node->left) {
+                T temp = node->right;
+                delete node;
+            } else if (!node->right) {
+                T temp = node->left;
+                delete node;
+            }
+
+            
+            T temp = minValueNode(node->right);
+
+            node->key = temp->key;
+
+            node->right = deleteNode(node->right, temp->date);
+        }
+        return node;
+    }
+
 };
 
 #endif
