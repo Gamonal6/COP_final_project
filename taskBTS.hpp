@@ -1,7 +1,9 @@
 #ifndef TASKBST_H
 #define TASKBST_H
 #include <iostream>
+#include <chrono>
 using namespace std;
+using namespace std::chrono;
 template <typename T>
 class TaskBST {
 private:
@@ -37,12 +39,12 @@ public:
         inorderTraversal(root);
     }
 
-    void deleteNode(T node, int key) {
+    void deleteNode(T node, year_date_month key) {
         if (!node) return; 
 
-        if (key < node->date)
+        if (key < node->dueDate)
             node->left = deleteNode(node->left, key);
-        else if (key > node->date)
+        else if (key > node->dueDate)
             node->right = deleteNode(node->right, key);
         else {
             if (!node->left) {
@@ -56,9 +58,9 @@ public:
             
             T temp = minValueNode(node->right);
 
-            node->key = temp->key;
+            node->dueDate = temp->key;
 
-            node->right = deleteNode(node->right, temp->date);
+            node->right = deleteNode(node->right, temp->dueDate);
         }
         return node;
     }
