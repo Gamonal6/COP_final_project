@@ -8,14 +8,14 @@ class TaskBST {
 private:
     T root; 
 
-    T insert(T node, int m, const std::string& title, int day, int month,const std::string& date) {
+    T insert(T node, T new_node) {
         if (!node) {
-            return new T(m, title, day, month, date); 
+            return new_node; 
         }
-        if (date < node->dueDate) {
-            node->left = insert(node->left, date, title);
+        if (new_node->dueDate < node->dueDate) {
+            node->left = insert(node->left, new_node);
         } else {
-            node->right = insert(node->right, date, title);
+            node->right = insert(node->right, new_node);
         }
         return node;
     }
@@ -30,8 +30,8 @@ private:
 
 public:
     TaskBST() : root(nullptr) {}
-    void insert(int m, const std::string& title, int day, int month, const std::string& date) {
-        root = insert(root, m, title, day, month, date);
+    void insert(T new_node) {
+        root = insert(root, new_node);
     }
 
     void displayTasks() {
