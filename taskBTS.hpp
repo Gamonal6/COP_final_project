@@ -48,7 +48,7 @@ private:
             
             T temp = minValueNode(node->right);
 
-            node->dueDate = temp->key;
+            node->dueDate = temp->dueDate;
 
             node->right = deleteNode(node->right, temp->dueDate);
         }

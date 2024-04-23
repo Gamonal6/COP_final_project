@@ -26,19 +26,7 @@ public:
 private:
   bool lessThan;
 };
-
-class SubtractMinutes {
-public:
-  int operator()(TaskNode *node, int minutes);
 };
-    // Destructor (if needed)
-    // ~Node() {}
-};
-
-int TaskNode::SubtractMinutes::operator()(TaskNode *node, int minutes) {
-  node->minutes -= minutes;
-  return node->minutes;
-}
 
 
 bool TaskNode::Compare::operator()(const TaskNode &n1,
@@ -162,11 +150,6 @@ while ((!pq.empty() || new_task == true) && terminate_program == false) {
       cin >> minutes_worked;
       int *x = &pq.min() -> minutes;
       *x = *x  - minutes_worked;
-      // cout << "Did you start working on your most important task? (Enter y for yes and n for no) " << endl;
-      // string start;
-      // int MinutesWorked;
-      // string i;
-      // cin >> start;
       cout << "You need to work on " << pq.min()->task << " for " << pq.min()->minutes << "minutes to finish this task" << endl;
     }
     }
