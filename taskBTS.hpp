@@ -32,16 +32,13 @@ private:
     void inorderTraversal(T node) {
         if (node) {
             inorderTraversal(node->left);
-            auto y = int(node->dueDate.year());
-            auto m = unsigned(node->dueDate.month());
-            auto d = unsigned(node->dueDate.day());
-
-            std::cout << "Due Date: " << y << '-' << (m < 10 ? "0" : "") << m << '-' << (d < 10 ? "0" : "") << d << "|| Title: " << node->task << " || Priority: " << node->priority << std::endl;
+           
+            std::cout << "Due Date: " << node -> printDate << "|| Title: " << node->task << " || Priority: " << node->priority << std::endl;
             inorderTraversal(node->right);
         }
     }
 
-    T deleteNode(T node, year_month_day key) {
+    T deleteNode(T node, int key) {
         if (!node) return nullptr; 
 
         if (!node->left && !node->right) {
@@ -91,7 +88,7 @@ public:
         inorderTraversal(root);
     }
 
-    void deleteNode(year_month_day date){
+    void deleteNode(int date){
         root = deleteNode(root, date);
         
     }

@@ -8,15 +8,16 @@ using namespace std::chrono;
 using namespace std;
 class TaskNode {
 public:
+    string printDate;
     int priority;
     int minutes;
-    year_month_day dueDate;
+    int dueDate;
     string task;
     TaskNode* left = nullptr;
     TaskNode* right = nullptr;
 
     // Constructor
-    TaskNode(int m, string t, year_month_day due_date, int priority) : priority(priority), minutes(m), task(t), dueDate(due_date) {}
+    TaskNode(int m, string t, int due_date, int priority, string print_date) : priority(priority), minutes(m), task(t), dueDate(due_date), printDate(print_date) {}
 
 class Compare {
 public:
@@ -71,7 +72,8 @@ void insert_task(HeapQueue<TaskNode *, TaskNode::Compare>& pqf, TaskBST<TaskNode
   getline(cin, task);
   cout << "When is it due (YYYY-MM-DD)? " << endl;
   cin >> date[0] >> delimiter >> date[1] >> date[2];
-  year_month_day due_date = year{date[0]} / date[1] / date[2];
+  int due_date = (date[0] * 12*31)+ (date[1]*31) + date[2];
+  string print_date = to_string(date[0]) + "-" + to_string(date[1]) + "-" + to_string(date[2]);
   cout << "From a scale of 0-20, what is the priority of this task?" << endl;
   cin >> priority;
   cout << "How many minutes will it take? (Enter a whole number): " << endl;
@@ -80,7 +82,7 @@ void insert_task(HeapQueue<TaskNode *, TaskNode::Compare>& pqf, TaskBST<TaskNode
   std::cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
 
-  TaskNode *node = new TaskNode( minutes, task, due_date, priority);
+  TaskNode *node = new TaskNode( minutes, task, due_date, priority, print_date);
   pqf.insert(node);
   bstTree.insert(node);
 }
