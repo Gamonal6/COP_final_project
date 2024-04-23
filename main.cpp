@@ -53,12 +53,19 @@ bool TaskNode::Compare::operator()(const TaskNode *n1,
                   : n1->priority > n2->priority;
 }
 
+void delete_task(HeapQueue<TaskNode *, TaskNode::Compare>& pqf, TaskBST<TaskNode*>& bstTree) {
+
+  bstTree.deleteNode(pqf.min()->dueDate);
+  pqf.removeMin();
+  
+}
+
 void insert_task(HeapQueue<TaskNode *, TaskNode::Compare>& pqf, TaskBST<TaskNode*>& bstTree) {
   int date[3];
   int minutes;
   char delimiter = '-';
   int priority;
-  
+
   string task;
   cout << "Insert a task you would like to work on: " << endl;
   getline(cin, task);
@@ -79,7 +86,7 @@ void insert_task(HeapQueue<TaskNode *, TaskNode::Compare>& pqf, TaskBST<TaskNode
 }
 
 int main() {
-  
+
   HeapQueue<TaskNode *, TaskNode::Compare> pq;
   TaskBST<TaskNode*> bstTree;
 
@@ -93,10 +100,10 @@ int main() {
   // repeat until the list of integers is empty
   bool new_task = true;
   bool terminate_program = false;
-  
-  
+
+
   int n;
-  
+
 
   // std::cin.ignore(numeric_limits<streamsize>::max(), '\n'); //mixing cin and getline is disastrous, this is needed to clear the /n and let getline read sth
 
@@ -122,7 +129,7 @@ int main() {
   //   TaskNode *node = new TaskNode(priority, minutes, task, description);
   //   pq.insert(node);
   // }
-  
+
 while ((!pq.empty() || new_task == true) && terminate_program == false) {
   if (new_task == true){
     insert_task(pq,bstTree);
@@ -135,7 +142,8 @@ while ((!pq.empty() || new_task == true) && terminate_program == false) {
     cin >> status;
     string i;
     if (status == "y"){
-      pq.removeMin();
+      delete_task(pq, bstTree);
+      bstTree.displayTasks();
 
       if (pq.empty()){
         cout << "You are done with all your tasks! Would you like to insert a new task or are you done for the day? (y for new task, n for done)" << endl;
@@ -154,7 +162,7 @@ while ((!pq.empty() || new_task == true) && terminate_program == false) {
           toPrint.removeMin();
         }
       }
-      
+
     }
     else {
       int minutes_worked;
@@ -177,7 +185,7 @@ while ((!pq.empty() || new_task == true) && terminate_program == false) {
   cin >> decision;
   std::cin.ignore(numeric_limits<streamsize>::max(), '\n');
   new_task = true ? decision == "a" : false;
-  
+
 }
-  
+
 }
