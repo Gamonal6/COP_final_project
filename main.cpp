@@ -11,9 +11,11 @@ public:
     int minutes;
     string dueDate;
     string task;
+    TaskNode* left = nullptr;
+    TaskNode* right = nullptr;
 
     // Constructor
-    TaskNode(int m, string t, int day, int month, string due_date) : priority(day + month * 31), minutes(m), task(t), dueDate(due_date) {}
+    TaskNode(int m, string t, string due_date, int priority) : priority(priority), minutes(m), task(t), dueDate(due_date) {}
 
 class Compare {
 public:
@@ -54,26 +56,24 @@ void insert_task(HeapQueue<TaskNode *, TaskNode::Compare>& pqf, TaskBST<TaskNode
   int date[3];
   int minutes;
   char delimiter = '/';
+  int priority;
+  string due_date;
   string task;
   cout << "Insert a task you would like to work on: " << endl;
   getline(cin, task);
-  cout << "When is it due? " << endl;
-  cout << "day: " << endl;
-  cin >> date [1];
-  cout << "month: " << endl;
-  cin >> date[0];
-  cout << "year: " <<endl;
-  cin >> date[2];
-  string due_date = to_string(date[2]) + "-" + to_string(date[0]) + "-" + to_string(date[1]); 
+  cout << "When is it due (YYYY-MM-DD)? " << endl;
+  cin >> due_date;
+  cout << "From a scale of 0-20, what is the priority of this task?" << endl;
+  cin >> priority;
   cout << "How many minutes will it take? (Enter a whole number): " << endl;
   cin >> minutes;
 
   std::cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
 
-  TaskNode *node = new TaskNode( minutes, task, date[0], date[1], due_date);
+  TaskNode *node = new TaskNode( minutes, task, due_date, priority);
   pqf.insert(node);
-  bstTree.insert(minutes, task, date[0], date[1], due_date);
+  bstTree.insert(node);
 }
 
 int main() {
