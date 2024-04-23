@@ -1,17 +1,19 @@
 #include <iostream>
 #include <limits>
 #include "heapqueue.hpp"
+#include "taskBTS.hpp"
+#include <string>
 
 using namespace std;
-
 class TaskNode {
 public:
     int priority;
     int minutes;
+    string dueDate;
     string task;
 
     // Constructor
-    TaskNode(int m, string t, int day, int month) : priority(day + month * 31), minutes(m), task(t) {}
+    TaskNode(int m, string t, int day, int month, string due_date) : priority(day + month * 31), minutes(m), task(t), dueDate(due_date) {}
 
 class Compare {
 public:
@@ -48,27 +50,36 @@ bool TaskNode::Compare::operator()(const TaskNode *n1,
                   : n1->priority > n2->priority;
 }
 
-void insert_task(HeapQueue<TaskNode *, TaskNode::Compare>& pqf) {
-  int date[2];
+void insert_task(HeapQueue<TaskNode *, TaskNode::Compare>& pqf, TaskBST<TaskNode*>& bstTree) {
+  int date[3];
   int minutes;
   char delimiter = '/';
   string task;
   cout << "Insert a task you would like to work on: " << endl;
   getline(cin, task);
-  cout << "When is it due(MM/DD)? " << endl;
-  cin >> date[0]>> delimiter >>date[1]; 
+  cout << "When is it due? " << endl;
+  cout << "day: " << endl;
+  cin >> date [1];
+  cout << "month: " << endl;
+  cin >> date[0];
+  cout << "year: " <<endl;
+  cin >> date[2];
+  string due_date = to_string(date[2]) + "-" + to_string(date[0]) + "-" + to_string(date[1]); 
   cout << "How many minutes will it take? (Enter a whole number): " << endl;
   cin >> minutes;
 
   std::cin.ignore(numeric_limits<streamsize>::max(), '\n');
-  TaskNode *node = new TaskNode( minutes, task, date[0], date[1]);
+
+
+  TaskNode *node = new TaskNode( minutes, task, date[0], date[1], due_date);
   pqf.insert(node);
-  
+  bstTree.insert(minutes, task, date[0], date[1], due_date);
 }
 
 int main() {
   
   HeapQueue<TaskNode *, TaskNode::Compare> pq;
+  TaskBST<TaskNode*> bstTree;
 
   // CREATING A TODO LIST:
   // prompt the use for number of tasks n
@@ -112,7 +123,7 @@ int main() {
   
 while ((!pq.empty() || new_task == true) && terminate_program == false) {
   if (new_task == true){
-    insert_task(pq);
+    insert_task(pq,bstTree);
   }
   else{
     cout << "Your next priority is: " << pq.min()->task << endl;
