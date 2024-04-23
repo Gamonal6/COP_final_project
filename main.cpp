@@ -3,19 +3,20 @@
 #include "heapqueue.hpp"
 #include "taskBTS.hpp"
 #include <string>
-
+#include <chrono>
+using namespace std::chrono;
 using namespace std;
 class TaskNode {
 public:
     int priority;
     int minutes;
-    string dueDate;
+    year_month_day dueDate;
     string task;
     TaskNode* left = nullptr;
     TaskNode* right = nullptr;
 
     // Constructor
-    TaskNode(int m, string t, string due_date, int priority) : priority(priority), minutes(m), task(t), dueDate(due_date) {}
+    TaskNode(int m, string t, year_month_day due_date, int priority) : priority(priority), minutes(m), task(t), dueDate(due_date) {}
 
 class Compare {
 public:
@@ -55,14 +56,15 @@ bool TaskNode::Compare::operator()(const TaskNode *n1,
 void insert_task(HeapQueue<TaskNode *, TaskNode::Compare>& pqf, TaskBST<TaskNode*>& bstTree) {
   int date[3];
   int minutes;
-  char delimiter = '/';
+  char delimiter = '-';
   int priority;
-  string due_date;
+  
   string task;
   cout << "Insert a task you would like to work on: " << endl;
   getline(cin, task);
   cout << "When is it due (YYYY-MM-DD)? " << endl;
-  cin >> due_date;
+  cin >> date[0] >> delimiter >> date[1] >> date[2];
+  year_month_day due_date = year{date[0]} / date[1] / date[2];
   cout << "From a scale of 0-20, what is the priority of this task?" << endl;
   cin >> priority;
   cout << "How many minutes will it take? (Enter a whole number): " << endl;
