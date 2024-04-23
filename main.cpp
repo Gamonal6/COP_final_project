@@ -104,32 +104,6 @@ int main() {
 
   int n;
 
-
-  // std::cin.ignore(numeric_limits<streamsize>::max(), '\n'); //mixing cin and getline is disastrous, this is needed to clear the /n and let getline read sth
-
-  // for (int i = 0; i < n; i++){
-  //   int priority;
-  //   int minutes;
-  //   string task;
-  //   string description;
-
-  //   cout << "Enter the task: " << endl;
-  //   getline(cin, task);
-
-  //   cout << "Describe the task: " << endl;
-  //   getline(cin,description);
-
-  //   cout << "On a scale from 1-10 with 1 being the highest, What is the priority of this task: (Enter a whole number)" << endl;
-  //   cin >> priority;
-
-  //   cout << "How many minutes will it take? (Enter a whole number): " << endl;
-  //   cin >> minutes;
-
-  //   std::cin.ignore(numeric_limits<streamsize>::max(), '\n');
-  //   TaskNode *node = new TaskNode(priority, minutes, task, description);
-  //   pq.insert(node);
-  // }
-
 while ((!pq.empty() || new_task == true) && terminate_program == false) {
   if (new_task == true){
     insert_task(pq,bstTree);
@@ -170,11 +144,6 @@ while ((!pq.empty() || new_task == true) && terminate_program == false) {
       cin >> minutes_worked;
       int *x = &pq.min() -> minutes;
       *x = *x  - minutes_worked;
-      // cout << "Did you start working on your most important task? (Enter y for yes and n for no) " << endl;
-      // string start;
-      // int MinutesWorked;
-      // string i;
-      // cin >> start;
       cout << "You need to work on " << pq.min()->task << " for " << pq.min()->minutes << "minutes to finish this task" << endl;
     }
     }
