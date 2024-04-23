@@ -29,17 +29,7 @@ private:
         }
     }
 
-public:
-    TaskBST() : root(nullptr) {}
-    void insert(T new_node) {
-        root = insert(root, new_node);
-    }
-
-    void displayTasks() {
-        inorderTraversal(root);
-    }
-
-    void deleteNode(T node, year_date_month key) {
+    T deleteNode(T node, year_month_day key) {
         if (!node) return; 
 
         if (key < node->dueDate)
@@ -63,6 +53,28 @@ public:
             node->right = deleteNode(node->right, temp->dueDate);
         }
         return node;
+    }
+
+    T minValueNode(T node) {
+        T current = node;
+        while (current && current->left != nullptr) {
+            current = current->left;
+        }
+        return current;
+    }
+
+public:
+    TaskBST() : root(nullptr) {}
+    void insert(T new_node) {
+        root = insert(root, new_node);
+    }
+
+    void displayTasks() {
+        inorderTraversal(root);
+    }
+
+    void deleteNode(year_month_day date){
+        deleteNode(root, date);
     }
 
 };
