@@ -10,14 +10,14 @@ class TaskNode {
 public:
     string printDate;
     int priority;
-    int minutes;
+    int percentage;
     int dueDate;
     string task;
     TaskNode* left = nullptr;
     TaskNode* right = nullptr;
 
     // Constructor
-    TaskNode(int m, string t, int due_date, int priority, string print_date) : priority(priority), minutes(m), task(t), dueDate(due_date), printDate(print_date) {}
+    TaskNode(int m, string t, int due_date, int priority, string print_date) : priority(priority), percentage(m), task(t), dueDate(due_date), printDate(print_date) {}
 
 class Compare {
 public:
@@ -36,9 +36,9 @@ public:
     // ~Node() {}
 };
 
-int TaskNode::SubtractMinutes::operator()(TaskNode *node, int minutes) {
-  node->minutes -= minutes;
-  return node->minutes;
+int TaskNode::SubtractMinutes::operator()(TaskNode *node, int percentage) {
+  node->percentage -= percentage;
+  return node->percentage;
 }
 
 
@@ -50,20 +50,20 @@ bool TaskNode::Compare::operator()(const TaskNode &n1,
 
 bool TaskNode::Compare::operator()(const TaskNode *n1,
                                       const TaskNode *n2) const { //What if tasks have equal priority
-  return lessThan ? n1->priority < n2->priority
-                  : n1->priority > n2->priority;
+  return lessThan ? n1->priority > n2->priority
+                  : n1->priority < n2->priority;
 }
 
 void delete_task(HeapQueue<TaskNode *, TaskNode::Compare>& pqf, TaskBST<TaskNode*>& bstTree) {
 
   bstTree.deleteNode(pqf.min()->dueDate);
   pqf.removeMin();
-  
+
 }
 
 void insert_task(HeapQueue<TaskNode *, TaskNode::Compare>& pqf, TaskBST<TaskNode*>& bstTree) {
   int date[3];
-  int minutes;
+  int percentage = 100;
   char delimiter = '-';
   int priority;
 
@@ -74,15 +74,17 @@ void insert_task(HeapQueue<TaskNode *, TaskNode::Compare>& pqf, TaskBST<TaskNode
   cin >> date[0] >> delimiter >> date[1] >> date[2];
   int due_date = (date[0] * 12*31)+ (date[1]*31) + date[2];
   string print_date = to_string(date[0]) + "-" + to_string(date[1]) + "-" + to_string(date[2]);
-  cout << "From a scale of 0-20, what is the priority of this task?" << endl;
+  cout << "From a scale of 0-100, what is the priority of this task?" << endl;
   cin >> priority;
-  cout << "How many minutes will it take? (Enter a whole number): " << endl;
-  cin >> minutes;
+  while (priority < 0 || priority > 100){
+    cout << "Please enter a priority between 0 and 100: " << endl;
+    cin >> priority;
+  }
 
   std::cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
 
-  TaskNode *node = new TaskNode( minutes, task, due_date, priority, print_date);
+  TaskNode *node = new TaskNode( percentage, task, due_date, priority, print_date);
   pqf.insert(node);
   bstTree.insert(node);
 }
@@ -92,14 +94,6 @@ int main() {
   HeapQueue<TaskNode *, TaskNode::Compare> pq;
   TaskBST<TaskNode*> bstTree;
 
-  // CREATING A TODO LIST:
-  // prompt the use for number of tasks n
-  // create a list of integers from 1 to the n
-  // ask the user for the task
-  // ask the user for the priority of the task ranging from 1 to 10 from 1 being the highest and 10 being the lowest
-  // add the task node to the priority queue pq
-  // remove the number from the list of integers
-  // repeat until the list of integers is empty
   bool new_task = true;
   bool terminate_program = false;
 
@@ -112,11 +106,14 @@ while ((!pq.empty() || new_task == true) && terminate_program == false) {
   }
   else{
     cout << "Your next priority is: " << pq.min()->task << endl;
-    cout << "You have: " << pq.min() -> minutes << " minutes left on this task" << endl;
-    cout << "When you are done with the task, yes to complete the task or no if you wanna stop working on it? (Enter y for yes and n for no) ";
+    cout << "You have " << pq.min()->percentage << " % of work left of this task" << endl;
+    cout << "If you are 100% done with the task, enter y to indicate that its finished or n if you haven't finished it yet. ";
     string status;
     cin >> status;
-    string i;
+    while(status != "y" && status != "n"){
+      cout << "Invalid input, enter y or n: ";
+      cin >> status;
+    }
     if (status == "y"){
       delete_task(pq, bstTree);
       bstTree.displayTasks();
@@ -124,29 +121,34 @@ while ((!pq.empty() || new_task == true) && terminate_program == false) {
       if (pq.empty()){
         cout << "You are done with all your tasks! Would you like to insert a new task or are you done for the day? (y for new task, n for done)" << endl;
 
+      
         cin >> status;
+        while(status != "y" && status != "n"){
+          cout << "Invalid input, enter y or n: ";
+          cin >> status;
+        }
 
         if (status == "n"){
           terminate_program = true;
           break;
         }
-      }
-      else{
-        HeapQueue<TaskNode *, TaskNode::Compare> toPrint = pq;
-        while (!toPrint.empty()){
-          cout << toPrint.min()->task << endl;
-          toPrint.removeMin();
+        else if(status == "y"){
+            insert_task(pq,bstTree);
         }
       }
 
     }
     else {
-      int minutes_worked;
-      cout << "How many minutes did you work on that task? " << endl;
-      cin >> minutes_worked;
-      int *x = &pq.min() -> minutes;
-      *x = *x  - minutes_worked;
-      cout << "You need to work on " << pq.min()->task << " for " << pq.min()->minutes << "minutes to finish this task" << endl;
+      int percent_done;
+      cout << "How much percent of the task did you finish (enter a number from 0 - 100? " << endl;
+      cin >> percent_done;
+      while (percent_done < 0 || percent_done > 100){
+        cout << "Invalid input, enter a number from 0 - 100: " << endl;
+        cin >> percent_done;
+      }
+      int *x = &pq.min() -> percentage;
+      *x = *x  - percent_done;
+      cout << "You still have " << pq.min()->percentage << "% work left for task " << pq.min()->task << endl;
     }
     }
 

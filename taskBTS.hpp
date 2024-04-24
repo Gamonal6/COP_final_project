@@ -32,9 +32,11 @@ private:
     void inorderTraversal(T node) {
         if (node) {
             inorderTraversal(node->left);
+
            
-            std::cout << "Due Date: " << node -> printDate << "|| Title: " << node->task << " || Priority: " << node->priority << std::endl;
             inorderTraversal(node->right);
+
+             std::cout << "Due Date: " << node -> printDate << "|| Task: " << node->task << " || Priority: " << node->priority << std::endl;
         }
     }
 
@@ -90,7 +92,7 @@ public:
 
     void deleteNode(int date){
         root = deleteNode(root, date);
-        
+
     }
 
 };
